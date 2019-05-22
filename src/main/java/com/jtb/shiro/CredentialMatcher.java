@@ -8,9 +8,9 @@ import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 /**
  * @auther: jtb
  * @date: 2019/5/20 23:03
- * @description:
+ * @description: 密码校验规则的重写
  */
-public class CredentialsMatcher extends SimpleCredentialsMatcher {
+public class CredentialMatcher extends SimpleCredentialsMatcher {
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {

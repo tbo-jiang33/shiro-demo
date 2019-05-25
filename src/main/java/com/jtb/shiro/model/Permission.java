@@ -8,7 +8,7 @@ package com.jtb.shiro.model;
 public class Permission {
 
     private Integer pid;
-    private String name;
+    private String pname;
     private String url;
 
     public Integer getPid() {
@@ -19,12 +19,12 @@ public class Permission {
         this.pid = pid;
     }
 
-    public String getName() {
-        return name;
+    public String getPname() {
+        return pname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPname(String pname) {
+        this.pname = pname;
     }
 
     public String getUrl() {

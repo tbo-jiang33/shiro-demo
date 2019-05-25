@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
  * @date: 2019/5/12 17:38
  * @description:
  */
-@Service
 public interface UserService {
 
     User findByUsername(String username);

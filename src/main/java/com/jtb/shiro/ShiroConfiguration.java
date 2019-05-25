@@ -1,6 +1,6 @@
 package com.jtb.shiro;
 
-import org.apache.shiro.mgt.DefaultSecurityManager;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -66,7 +66,7 @@ public class ShiroConfiguration {
      */
     @Bean("securityManager")
     public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
-        DefaultSecurityManager defaultSecurityManager = new DefaultSecurityManager();
+        DefaultWebSecurityManager defaultSecurityManager = new DefaultWebSecurityManager();
         defaultSecurityManager.setRealm(authRealm);
         return defaultSecurityManager;
     }

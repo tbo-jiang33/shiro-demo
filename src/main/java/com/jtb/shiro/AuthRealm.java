@@ -43,7 +43,7 @@ public class AuthRealm extends AuthorizingRealm {
             Set<Permission> permissionSet = role.getPermissions();
             if (! CollectionUtils.isEmpty(permissionSet)) {
                 for (Permission permission : permissionSet) {
-                    permissionList.add(permission.getName());
+                    permissionList.add(permission.getPname());
                 }
             }
         }

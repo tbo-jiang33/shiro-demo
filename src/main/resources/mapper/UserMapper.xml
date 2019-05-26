@@ -26,5 +26,4 @@
           inner join permission p
         where u.username = #{username}
     </select>
-
 </mapper>

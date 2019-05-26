@@ -47,6 +47,8 @@ public class TestController {
             session.setAttribute("user", user);
             return "index";
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("账号或密码错误--");
             return "login";
         }
 

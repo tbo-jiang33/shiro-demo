@@ -1,13 +1,16 @@
 package com.jtb.shiro.controller;
 
 import com.jtb.shiro.model.User;
+import com.jtb.shiro.service.UserService;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,6 +21,17 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 public class TestController {
+
+    @Autowired
+    private UserService userService;
+
+    @ResponseBody
+    @RequestMapping("/findUser")
+    public User findUser(@RequestParam("username") String username,
+                               @RequestParam("password") String password) {
+        User user = userService.findByUsername(username);
+        return user;
+    }
 
     @RequestMapping("/login")
     public String login() {

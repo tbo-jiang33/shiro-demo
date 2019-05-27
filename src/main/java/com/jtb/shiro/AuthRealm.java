@@ -38,8 +38,10 @@ public class AuthRealm extends AuthorizingRealm {
         // 在session域拿到user
         User user = (User) principalCollection.fromRealm(this.getClass().getName()).iterator().next();
         List<String> permissionList = new ArrayList<>();
+        List<String> roleList = new ArrayList<>();
         Set<Role> roleSet = user.getRoles();
         for (Role role : roleSet) {
+            roleList.add(role.getRname());
             Set<Permission> permissionSet = role.getPermissions();
             if (! CollectionUtils.isEmpty(permissionSet)) {
                 for (Permission permission : permissionSet) {
@@ -49,6 +51,7 @@ public class AuthRealm extends AuthorizingRealm {
         }
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         info.addStringPermissions(permissionList);
+        info.addRoles(roleList);
         return info;
     }
 

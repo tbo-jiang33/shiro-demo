@@ -43,6 +43,28 @@ public class TestController {
         return "index";
     }
 
+    @RequestMapping("/admin")
+    public String admin() {
+        return "admin";
+    }
+
+    @RequestMapping("/edit")
+    public String edit() {
+        return "edit";
+    }
+    @RequestMapping("/logout")
+    public String logout() {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject != null) {
+            subject.logout();
+        }
+        return "login";
+    }
+
+    @RequestMapping("unauthorized")
+    public String unauthorized() {
+        return "unauthorized";
+    }
     @RequestMapping("/loginUser")
     public String loginUser(@RequestParam("username") String username,
                             @RequestParam("password") String password,

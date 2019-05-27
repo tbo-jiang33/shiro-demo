@@ -55,6 +55,11 @@ public class ShiroConfiguration {
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/index", "authc");
         filterChainDefinitionMap.put("/login", "anon");
+        filterChainDefinitionMap.put("/loginUser", "anon");
+        filterChainDefinitionMap.put("/admin", "roles[admin]"); // admin接口需要admin角色才能访问
+        filterChainDefinitionMap.put("/edit", "perms[edit]"); // edit接口需要有edit权限的才能访问
+        filterChainDefinitionMap.put("/**", "user");
+
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilter;
     }

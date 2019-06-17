@@ -51,6 +51,11 @@ public class ShiroConfiguration {
          * value: 代表拦截器
          * 如/index界面，必须登录则使用authc拦截器
          * 而/login是不需要登录的，则使用anon拦截器
+         *
+         * ("/admin", "roles[admin]") 访问admin接口时因为指定只有admin用户才能访问，
+         *      所以会调用hasRole方法进行验证，在《跟我学Shiro》中28页有说，并追踪授权代码得出结论
+         * 同理，("/edit", "perms[edit]")访问edit接口只有拥有edit资源（权限）的用户才能访问，
+         *      所以会调用isPermitted方法进行验证
          */
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/index", "authc");

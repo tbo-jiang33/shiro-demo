@@ -26,4 +26,8 @@
         INNER JOIN permission p on pr.pid = p.pid
       WHERE u.username = #{username}
     </select>
+    
+    <select id="findPerms" resultType="java.util.HashMap">
+      SELECT name, url FROM `permission`;
+    </select>
 </mapper>

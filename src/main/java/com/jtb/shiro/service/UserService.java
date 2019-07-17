@@ -4,6 +4,9 @@ import com.jtb.shiro.model.User;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * @auther: jtb
@@ -13,5 +16,7 @@ import org.springframework.stereotype.Service;
 public interface UserService {
 
     User findByUsername(String username);
+
+    List<Map<String, String>> findPerms();
 
 }

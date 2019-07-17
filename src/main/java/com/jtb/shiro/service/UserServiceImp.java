@@ -5,6 +5,9 @@ import com.jtb.shiro.model.User;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 /**
@@ -12,7 +15,7 @@ import javax.annotation.Resource;
  * @date: 2019/5/12 17:40
  * @description:
  */
-@Service
+@Service("userServiceImpl")
 public class UserServiceImp implements UserService {
 
     @Resource
@@ -21,5 +24,10 @@ public class UserServiceImp implements UserService {
     @Override
     public User findByUsername(String username) {
         return userMapper.findByUsername(username);
+    }
+
+    @Override
+    public List<Map<String, String>> findPerms() {
+        return userMapper.findPerms();
     }
 }

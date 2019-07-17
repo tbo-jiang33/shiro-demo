@@ -1,15 +1,22 @@
 package com.jtb.shiro;
 
+import com.jtb.shiro.model.User;
+import com.jtb.shiro.service.UserService;
+
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @auther: jtb
@@ -18,6 +25,9 @@ import java.util.LinkedHashMap;
  */
 @Configuration  // 项目启动时自动配置这里定义的类
 public class ShiroConfiguration {
+
+    @Autowired
+    private UserService userService;
 
     /**
      * ShiroFilter的工厂Bean 允许我们定义自己的SecurityManger,
@@ -33,7 +43,7 @@ public class ShiroConfiguration {
      * 而此方法用到的完全取决于DefaultFilter的枚举name。
      * 代表符合条件的url使用后面定义的拦截器
      */
-    @Bean("shiroFilter")
+    /*@Bean("shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
@@ -45,7 +55,7 @@ public class ShiroConfiguration {
         //设置没有权限访问跳转的url
         shiroFilter.setUnauthorizedUrl("/unauthorized");
 
-        /*
+        *//*
          * 配置某些请求怎么进行拦截
          * key: 正则表达式，代表我们访问的请求
          * value: 代表拦截器
@@ -56,16 +66,52 @@ public class ShiroConfiguration {
          *      所以会调用hasRole方法进行验证，在《跟我学Shiro》中28页有说，并追踪授权代码得出结论
          * 同理，("/edit", "perms[edit]")访问edit接口只有拥有edit资源（权限）的用户才能访问，
          *      所以会调用isPermitted方法进行验证
-         */
+         *//*
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/index", "authc");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/loginUser", "anon");
         filterChainDefinitionMap.put("/admin", "roles[admin]"); // admin接口需要admin角色才能访问
         filterChainDefinitionMap.put("/edit", "perms[edit]"); // edit接口需要有edit权限的才能访问
-        filterChainDefinitionMap.put("/**", "user");
-
+        filterChainDefinitionMap.put("/findPerms", "anon"); // edit接口需要有edit权限的才能访问
+        List<Map<String, String>> perms =  userService.findPerms();
+        for (Map<String, String> permMap : perms) {
+            filterChainDefinitionMap.put(permMap.get("url"), "perms[ " + permMap.get("name") + " ]");
+        }
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        filterChainDefinitionMap.put("/**", "user");
+        return shiroFilter;
+    }*/
+
+    /**
+     * 上面那个方法是只有根据数据库加载url配置过滤器链的情况
+     * 而此方法将加载url配置过滤器链分离出另一个类，使其能够获取到本类并动态加载
+     * @param securityManager
+     * @return
+     */
+    @Bean("shiroFilter")
+    public ShiroPermissionFactory shiroFilter(@Qualifier("securityManager") SecurityManager securityManager) {
+        ShiroPermissionFactory shiroFilter = new ShiroPermissionFactory();
+        shiroFilter.setSecurityManager(securityManager);
+        //设置登录的url
+        shiroFilter.setLoginUrl("/login");
+        //设置登录成功后的url
+        shiroFilter.setSuccessUrl("/index");
+        //设置没有权限访问跳转的url
+        shiroFilter.setUnauthorizedUrl("/unauthorized");
+
+        // 设置默认过滤器链，被ini读取
+        String filterStr = "/index=authc\n" +
+                "/login=anon\n" +
+                "/loginUser=anon\n" +
+                "/admin=roles[admin]\n" +
+                //"/findPerms=perms[edit]\n" +
+                "/edit=perms[edit]\n" +
+                "/logout=anon";
+        // 先给ShiroPermissionFactory实例传递userService实例
+        shiroFilter.setUserService(userService);
+        // 设置数据库的过滤器链
+        shiroFilter.setFilterChainDefinitions(filterStr);
         return shiroFilter;
     }
 
